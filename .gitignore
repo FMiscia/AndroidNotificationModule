@@ -1,5 +1,7 @@
 /build
 /release
+/src/*
+!/src/main
 .DS_Store
 *.iml
 *.pro
