@@ -30,6 +30,11 @@ public class NotificationSchedulerFactory {
         }
     }
 
+    /**
+     * Singleton
+     *
+     * @return {@link NotificationSchedulerFactory}
+     */
     public static NotificationSchedulerFactory getInstance(){
         if(_instance == null){
             _instance = new NotificationSchedulerFactory();

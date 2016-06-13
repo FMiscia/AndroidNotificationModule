@@ -5,10 +5,8 @@ import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.os.SystemClock;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 
 import com.dev.francescomiscia.minicliplibrary.models.NotificationModel;
 import com.unity3d.player.UnityPlayer;
@@ -36,7 +34,7 @@ public class LocalNotificationScheduler implements INotificationScheduler {
         //Let's create the pending intent for the Notification
         Intent resultIntent = new Intent(context, UnityPlayer.currentActivity.getClass());
         resultIntent.putStringArrayListExtra(LocalNotificationScheduler.notificationDataKey,
-                NotificationHelper.getNotificationIntentContent(notificationModel));
+                NotificationHelper.buildIntentNotificationContent(notificationModel));
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntent(resultIntent);
         PendingIntent resultPendingIntent = stackBuilder.getPendingIntent((int)System.currentTimeMillis(),PendingIntent.FLAG_UPDATE_CURRENT);
@@ -51,10 +49,12 @@ public class LocalNotificationScheduler implements INotificationScheduler {
                         .setContentIntent(resultPendingIntent);
         Notification notification = mBuilder.build();
 
-        //Alarm manager creation. The intent will contain the notification to be broadcasted
+        //Alarm manager creation. The intent will contain the notification and the notification data to be broadcasted
         Intent alarmIntent = new Intent(context, LocalNotificationReceiver.class);
         alarmIntent.putExtra(notificationIntentIdKey,notificationModel.getId());
         alarmIntent.putExtra(notificationIntentKey,notification);
+        alarmIntent.putStringArrayListExtra(LocalNotificationScheduler.notificationDataKey,
+                NotificationHelper.buildIntentNotificationContent(notificationModel));
         PendingIntent pendingAlarmIntent = PendingIntent.getBroadcast(context,notificationModel.getId(),alarmIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();

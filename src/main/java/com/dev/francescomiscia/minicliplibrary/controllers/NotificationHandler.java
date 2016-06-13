@@ -5,7 +5,6 @@ package com.dev.francescomiscia.minicliplibrary.controllers;
  */
 
 import android.content.Context;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.dev.francescomiscia.minicliplibrary.R;
@@ -32,20 +31,12 @@ public class  NotificationHandler{
     private NotificationHandler(){}
 
     /**
-     * Sets the {@link android.app.Activity} {@link Context} for this handler
-     *
-     * @param context the {@link Context} to be set
-     */
-    public void setContext(Context context) {
-        this.context = context;
-    }
-
-    /**
      * Submits through the {@link com.dev.francescomiscia.minicliplibrary.events.INotificationScheduler} the notifications
      *
      * @param delay time delay
      */
     public void submitNotifications(int delay){
+        disposeNotifications();
         pendingNotifications.clear();
         LocalNotificationScheduler notificationScheduler = (LocalNotificationScheduler) NotificationSchedulerFactory.getInstance().
                 makeNotificationScheduler(NotificationSchedulerFactory.NotificationType.LOCAL);
@@ -82,7 +73,7 @@ public class  NotificationHandler{
     }
 
     /**
-     * Generate a sample set of notifications
+     * Generates a sample set of notifications
      *
      * @return bundle of notifications {@link ArrayList} of {@link NotificationModel}
      */
@@ -95,6 +86,15 @@ public class  NotificationHandler{
         notifications.add(NotificationBuilder.getInstance().buildNotification("Fifth","Fifth beer","beer5", R.drawable.beer5));
 
         return notifications;
+    }
+
+    /**
+     * Sets the {@link android.app.Activity} {@link Context} for this handler
+     *
+     * @param context the {@link Context} to be set
+     */
+    public void setContext(Context context) {
+        this.context = context;
     }
 
     /**

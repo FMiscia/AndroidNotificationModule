@@ -14,7 +14,7 @@ public class NotificationBuilder {
     private NotificationBuilder(){}
 
     /**
-     * Build a {@link NotificationModel} with a uniqueID and the given parameters
+     * Builds a {@link NotificationModel} with a uniqueID and the given parameters
      * @param title
      * @param content
      * @param iconName
@@ -23,6 +23,19 @@ public class NotificationBuilder {
      */
     public NotificationModel buildNotification(String title, String content, String iconName, int icon){
         return new NotificationModel(UUID.randomUUID().hashCode(),title,content,iconName,icon);
+    }
+
+    /**
+     * Builds a {@link NotificationModel} with the given id
+     * @param id
+     * @param title
+     * @param content
+     * @param iconName
+     * @param icon
+     * @return {@link NotificationModel}
+     */
+    public NotificationModel buildNotification(int id, String title, String content, String iconName, int icon){
+        return new NotificationModel(id,title,content,iconName,icon);
     }
 
     /**
