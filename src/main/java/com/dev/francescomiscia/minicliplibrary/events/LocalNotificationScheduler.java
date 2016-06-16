@@ -8,7 +8,7 @@ import android.content.Intent;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.TaskStackBuilder;
 
-import com.dev.francescomiscia.minicliplibrary.models.NotificationModel;
+import com.dev.francescomiscia.minicliplibrary.models.SimpleNotification;
 import com.unity3d.player.UnityPlayer;
 
 import java.util.ArrayList;
@@ -29,7 +29,7 @@ public class LocalNotificationScheduler implements INotificationScheduler {
     }
 
     @Override
-    public int scheduleNotification(NotificationModel notificationModel, int delay, Context context) {
+    public int scheduleNotification(SimpleNotification notificationModel, int delay, Context context) {
 
         //Let's create the pending intent for the Notification
         Intent resultIntent = new Intent(context, UnityPlayer.currentActivity.getClass());
@@ -64,10 +64,10 @@ public class LocalNotificationScheduler implements INotificationScheduler {
     }
 
     @Override
-    public ArrayList<Integer> scheduleNotifications(ArrayList<NotificationModel> notifications, int delay, Context context) {
+    public ArrayList<Integer> scheduleNotifications(ArrayList<SimpleNotification> notifications, int delay, Context context) {
         ArrayList<Integer> ids = new ArrayList<>();
         int counter = 0;
-        for(NotificationModel notification : notifications){
+        for(SimpleNotification notification : notifications){
             ids.add(scheduleNotification(notification,delay*counter++,context));
         }
 

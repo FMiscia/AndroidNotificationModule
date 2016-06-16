@@ -8,7 +8,7 @@ public class NotificationSchedulerFactory {
 
     private static NotificationSchedulerFactory _instance;
 
-    public static enum NotificationType{LOCAL,REMOTE}
+    public enum NotificationType{LOCAL,REMOTE}
 
     private NotificationSchedulerFactory(){}
 

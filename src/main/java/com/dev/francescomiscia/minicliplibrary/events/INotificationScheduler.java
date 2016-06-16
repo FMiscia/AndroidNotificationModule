@@ -3,7 +3,7 @@ package com.dev.francescomiscia.minicliplibrary.events;
 import android.app.PendingIntent;
 import android.content.Context;
 
-import com.dev.francescomiscia.minicliplibrary.models.NotificationModel;
+import com.dev.francescomiscia.minicliplibrary.models.SimpleNotification;
 
 import java.util.ArrayList;
 
@@ -14,23 +14,23 @@ import java.util.ArrayList;
 public interface INotificationScheduler {
 
     /**
-     * Send the {@link NotificationModel} as Notification
-     *  @param notificationModel {@link NotificationModel}
+     * Send the {@link SimpleNotification} as Notification
+     *  @param notification {@link SimpleNotification}
      * @param delay delay between notifications
      * @param  context {@link Context}
      */
-    public abstract int scheduleNotification(NotificationModel notificationModel, int delay, Context context);
+    public abstract int scheduleNotification(SimpleNotification notification, int delay, Context context);
 
     /**
-     * Send the {@link ArrayList} of {@link NotificationModel} as Notification
+     * Send the {@link ArrayList} of {@link SimpleNotification} as Notification
      *
-     * @param notifications {@link ArrayList} of {@link NotificationModel}
+     * @param notifications {@link ArrayList} of {@link SimpleNotification}
      * @param delay delay between notifications
      * @param context {@link Context}
      *
      * @return  {@link PendingIntent}
      */
-    public abstract ArrayList<Integer> scheduleNotifications(ArrayList<NotificationModel> notifications, int delay, Context context);
+    public abstract ArrayList<Integer> scheduleNotifications(ArrayList<SimpleNotification> notifications, int delay, Context context);
 
     /**
      * Remove the scheduled notification with the given id from the {@link android.app.NotificationManager}

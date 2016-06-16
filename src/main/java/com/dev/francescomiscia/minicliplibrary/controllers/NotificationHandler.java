@@ -4,6 +4,7 @@ package com.dev.francescomiscia.minicliplibrary.controllers;
  * Created by francescomiscia
  */
 
+import android.app.PendingIntent;
 import android.content.Context;
 import android.widget.Toast;
 
@@ -11,7 +12,7 @@ import com.dev.francescomiscia.minicliplibrary.R;
 import com.dev.francescomiscia.minicliplibrary.events.LocalNotificationScheduler;
 import com.dev.francescomiscia.minicliplibrary.events.NotificationSchedulerFactory;
 import com.dev.francescomiscia.minicliplibrary.models.NotificationBuilder;
-import com.dev.francescomiscia.minicliplibrary.models.NotificationModel;
+import com.dev.francescomiscia.minicliplibrary.models.SimpleNotification;
 
 import java.util.ArrayList;
 
@@ -19,37 +20,23 @@ public class  NotificationHandler{
 
     private Context context;
     private static NotificationHandler _instance;
-    private static ArrayList<Integer> pendingNotifications;
-
-    static {
-      pendingNotifications = new ArrayList<>();
-    }
 
     /**
-     * Empty private constructor
+     * Submits through the {@link com.dev.francescomiscia.minicliplibrary.events.INotificationScheduler}
+     * a notification with the given parameters
+     * 
+     * @param id id of the notification
+     * @param title title of the notification {@link String}
+     * @param content content of the notification {@link String}
+     * @param icon icon name of the notification {@link String}
+     * @param delay time delay 
      */
-    private NotificationHandler(){}
-
-    /**
-     * Submits through the {@link com.dev.francescomiscia.minicliplibrary.events.INotificationScheduler} the notifications
-     *
-     * @param delay time delay
-     */
-    public void submitNotifications(int delay){
-        disposeNotifications();
-        pendingNotifications.clear();
+    public void submitNotification(String id, String title, String content, String icon, int delay){
+        int iconId = context.getResources().getIdentifier(icon, "drawable", context.getPackageName());
+        SimpleNotification notification = NotificationBuilder.getInstance().buildNotification(Integer.valueOf(id), title, content, icon, iconId);
         LocalNotificationScheduler notificationScheduler = (LocalNotificationScheduler) NotificationSchedulerFactory.getInstance().
                 makeNotificationScheduler(NotificationSchedulerFactory.NotificationType.LOCAL);
-        pendingNotifications.addAll(notificationScheduler.scheduleNotifications(getSampleNotifications(),delay,this.context));
-    }
-
-    /**
-     * Removes through the {@link com.dev.francescomiscia.minicliplibrary.events.INotificationScheduler} the submitted notifications
-     */
-    public void disposeNotifications(){
-        LocalNotificationScheduler notificationScheduler = (LocalNotificationScheduler) NotificationSchedulerFactory.getInstance().
-                makeNotificationScheduler(NotificationSchedulerFactory.NotificationType.LOCAL);
-        notificationScheduler.removeNotifications(pendingNotifications,context);
+        notificationScheduler.scheduleNotification(notification,delay,context);
     }
 
     /**
@@ -57,10 +44,10 @@ public class  NotificationHandler{
      *
      * @param id the id of the notification
      */
-    public void disposeNotification(int id){
+    public void disposeNotification(String id){
         LocalNotificationScheduler notificationScheduler = (LocalNotificationScheduler) NotificationSchedulerFactory.getInstance().
                 makeNotificationScheduler(NotificationSchedulerFactory.NotificationType.LOCAL);
-        notificationScheduler.removeNotification(id,context);
+        notificationScheduler.removeNotification(Integer.valueOf(id),context);
     }
 
     /**
@@ -73,46 +60,12 @@ public class  NotificationHandler{
     }
 
     /**
-     * Generates a sample set of notifications
-     *
-     * @return bundle of notifications {@link ArrayList} of {@link NotificationModel}
-     */
-    public ArrayList<NotificationModel> getSampleNotifications(){
-        ArrayList<NotificationModel> notifications = new ArrayList<>();
-        notifications.add(NotificationBuilder.getInstance().buildNotification("First","First beer","beer1", R.drawable.beer1));
-        notifications.add(NotificationBuilder.getInstance().buildNotification("Second","Second beer","beer2", R.drawable.beer2));
-        notifications.add(NotificationBuilder.getInstance().buildNotification("Third","Third beer","beer3", R.drawable.beer3));
-        notifications.add(NotificationBuilder.getInstance().buildNotification("Fourth","Fourth beer","beer4", R.drawable.beer4));
-        notifications.add(NotificationBuilder.getInstance().buildNotification("Fifth","Fifth beer","beer5", R.drawable.beer5));
-
-        return notifications;
-    }
-
-    /**
      * Sets the {@link android.app.Activity} {@link Context} for this handler
      *
      * @param context the {@link Context} to be set
      */
     public void setContext(Context context) {
         this.context = context;
-    }
-
-    /**
-     * Gives the pending notifications
-     *
-     * @return pending notifications id {@link ArrayList}
-     */
-    public static ArrayList<Integer> getPendingNotifications() {
-        return pendingNotifications;
-    }
-
-    /**
-     * Sets the pending notifications
-     *
-     * @param pendingNotifications {@link ArrayList}
-     */
-    public static void setPendingNotifications(ArrayList<Integer> pendingNotifications) {
-        NotificationHandler.pendingNotifications = pendingNotifications;
     }
 
     /**

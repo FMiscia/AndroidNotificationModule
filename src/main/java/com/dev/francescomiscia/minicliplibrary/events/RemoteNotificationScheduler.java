@@ -2,7 +2,7 @@ package com.dev.francescomiscia.minicliplibrary.events;
 
 import android.content.Context;
 
-import com.dev.francescomiscia.minicliplibrary.models.NotificationModel;
+import com.dev.francescomiscia.minicliplibrary.models.SimpleNotification;
 
 import java.util.ArrayList;
 
@@ -12,13 +12,13 @@ import java.util.ArrayList;
 public class RemoteNotificationScheduler implements INotificationScheduler {
 
     @Override
-    public int scheduleNotification(NotificationModel notificationModel, int delay, Context context) {
+    public int scheduleNotification(SimpleNotification notification, int delay, Context context) {
         //TODO: to be implemented
         return 0;
     }
 
     @Override
-    public ArrayList<Integer> scheduleNotifications(ArrayList<NotificationModel> notifications, int delay, Context context) {
+    public ArrayList<Integer> scheduleNotifications(ArrayList<SimpleNotification> notifications, int delay, Context context) {
         //TODO: to be implemented
         return null;
     }
