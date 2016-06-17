@@ -4,15 +4,20 @@ package com.dev.francescomiscia.minicliplibrary.controllers;
  * Created by francescomiscia
  */
 
+import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
+import android.service.notification.StatusBarNotification;
+import android.support.v4.app.TaskStackBuilder;
 import android.widget.Toast;
 
-import com.dev.francescomiscia.minicliplibrary.R;
 import com.dev.francescomiscia.minicliplibrary.events.LocalNotificationScheduler;
+import com.dev.francescomiscia.minicliplibrary.events.NotificationHelper;
 import com.dev.francescomiscia.minicliplibrary.events.NotificationSchedulerFactory;
 import com.dev.francescomiscia.minicliplibrary.models.NotificationBuilder;
 import com.dev.francescomiscia.minicliplibrary.models.SimpleNotification;
+import com.unity3d.player.UnityPlayer;
 
 import java.util.ArrayList;
 
@@ -47,7 +52,25 @@ public class  NotificationHandler{
     public void disposeNotification(String id){
         LocalNotificationScheduler notificationScheduler = (LocalNotificationScheduler) NotificationSchedulerFactory.getInstance().
                 makeNotificationScheduler(NotificationSchedulerFactory.NotificationType.LOCAL);
-        notificationScheduler.removeNotification(Integer.valueOf(id),context);
+        notificationScheduler.removeNotification(Integer.valueOf(id)*LocalNotificationScheduler.alarmRequestCodeIdMultiplier,context);
+    }
+
+    /**
+     * True if the notification, according to the given id, is visible
+     *
+     * @param id the id of the notification
+     *
+     * @return the notification visibility
+     */
+    private boolean isNotificationVisible(String id) {
+        StatusBarNotification notifications[] = ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).getActiveNotifications();
+        for (StatusBarNotification notification: notifications){
+            if(notification.getId() == Integer.valueOf(id)) {
+                ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).cancel(notification.getId());
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

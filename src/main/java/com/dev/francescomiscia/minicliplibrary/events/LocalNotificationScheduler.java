@@ -23,10 +23,8 @@ public class LocalNotificationScheduler implements INotificationScheduler {
     public final static String notificationIntentKey = "IncomingNotification";
     public final static String notificationIntentIdKey = "NotificationID";
     public final static String notificationDataKey = "NotificationData";
-    public static int requestCodeCounter;
-    static {
-        requestCodeCounter = 0;
-    }
+    public final static int alarmRequestCodeIdMultiplier = 10;
+
 
     @Override
     public int scheduleNotification(SimpleNotification notificationModel, int delay, Context context) {
@@ -37,7 +35,7 @@ public class LocalNotificationScheduler implements INotificationScheduler {
                 NotificationHelper.buildIntentNotificationContent(notificationModel));
         TaskStackBuilder stackBuilder = TaskStackBuilder.create(context);
         stackBuilder.addNextIntent(resultIntent);
-        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent((int)System.currentTimeMillis(),PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent resultPendingIntent = stackBuilder.getPendingIntent(notificationModel.getId(),PendingIntent.FLAG_UPDATE_CURRENT);
 
         //Notification building
         NotificationCompat.Builder mBuilder =
@@ -55,7 +53,7 @@ public class LocalNotificationScheduler implements INotificationScheduler {
         alarmIntent.putExtra(notificationIntentKey,notification);
         alarmIntent.putStringArrayListExtra(LocalNotificationScheduler.notificationDataKey,
                 NotificationHelper.buildIntentNotificationContent(notificationModel));
-        PendingIntent pendingAlarmIntent = PendingIntent.getBroadcast(context,notificationModel.getId(),alarmIntent,PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingAlarmIntent = PendingIntent.getBroadcast(context,notificationModel.getId()* alarmRequestCodeIdMultiplier,alarmIntent,PendingIntent.FLAG_UPDATE_CURRENT);
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MILLISECOND,delay);
